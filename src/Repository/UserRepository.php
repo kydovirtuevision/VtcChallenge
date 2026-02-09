@@ -22,4 +22,9 @@ class UserRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['confirmationToken' => $token]);
     }
+
+    public function findOneByApiToken(string $token): ?User
+    {
+        return $this->findOneBy(['apiToken' => $token]);
+    }
 }

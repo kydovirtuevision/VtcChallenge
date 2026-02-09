@@ -45,6 +45,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $confirmationToken;
 
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
+     */
+    private $apiToken;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }

@@ -100,7 +100,12 @@ class AuthController extends AbstractController
             return $this->json(['error' => 'invalid credentials'], 401);
         }
 
-        // simple success response; production would return a token/session
-        return $this->json(['message' => 'login successful']);
+        // generate api token and persist
+        $apiToken = bin2hex(random_bytes(32));
+        $user->setApiToken($apiToken);
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return $this->json(['message' => 'login successful', 'api_token' => $apiToken]);
     }
 }
