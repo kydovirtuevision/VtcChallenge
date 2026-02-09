@@ -38,30 +38,18 @@ class NoteController extends AbstractController
     /**
      * @Route("/", methods={"GET"})
      */
-    public function list(Request $request, NoteRepository $noteRepository, UserRepository $userRepository): JsonResponse
+    public function list(Request $request, NoteRepository $noteRepository, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
     {
         $user = $this->getUserFromRequest($request, $userRepository);
         if (!$user) {
             return $this->json(['error' => 'unauthorized'], 401);
         }
 
-        $q = $request->query->get('q');
-        $status = $request->query->get('status');
-        $category = $request->query->get('category');
+        // fallback to a simple DB query for listing to avoid possible ORM mapping edge-cases
+        $conn = $em->getConnection();
+        $rows = $conn->fetchAllAssociative('SELECT id, title, content, category, status FROM note WHERE owner_id = ?', [$user->getId()]);
 
-        $notes = $noteRepository->searchForUser($user, $q, $status, $category);
-
-        $data = array_map(function (Note $n) {
-            return [
-                'id' => $n->getId(),
-                'title' => $n->getTitle(),
-                'content' => $n->getContent(),
-                'category' => $n->getCategory(),
-                'status' => $n->getStatus(),
-            ];
-        }, $notes);
-
-        return $this->json($data);
+        return $this->json($rows);
     }
 
     /**
