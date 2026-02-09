@@ -18,9 +18,15 @@ class NoteRepository extends ServiceEntityRepository
      */
     public function searchForUser($owner, ?string $q, ?string $status, ?string $category)
     {
+        if (is_object($owner) && method_exists($owner, 'getId')) {
+            $ownerId = $owner->getId();
+        } else {
+            $ownerId = $owner;
+        }
+
         $qb = $this->createQueryBuilder('n')
-            ->andWhere('n.owner = :owner')
-            ->setParameter('owner', $owner);
+            ->andWhere('IDENTITY(n.owner) = :ownerId')
+            ->setParameter('ownerId', $ownerId);
 
         if ($q) {
             $qb->andWhere('n.title LIKE :q OR n.content LIKE :q')
