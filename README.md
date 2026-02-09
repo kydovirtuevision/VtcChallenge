@@ -69,5 +69,17 @@ Use the returned `api_token` to call notes endpoints (Bearer token):
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:81/api/notes/
 ```
+Note about running tests in this environment:
+
+ - I attempted to run the project's `bin/phpunit` wrapper, but the runtime here is missing a compatible PHP/OpenSSL binary and PHPUnit could not be executed. You can run tests locally after `composer install` with:
+
+```bash
+composer install
+./bin/phpunit
+```
+
+Database schema helper:
+
+ - A quick SQL schema is provided at `scripts/create_schema.sql` which you can apply to your database to create the `user` and `note` tables if not using Doctrine migrations.
 
 Frontend: open the app and use the Register / Login pages. After login the `Notes` page uses the API token stored in `localStorage`.
