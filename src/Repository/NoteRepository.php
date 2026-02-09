@@ -25,7 +25,8 @@ class NoteRepository extends ServiceEntityRepository
         }
 
         $qb = $this->createQueryBuilder('n')
-            ->andWhere('IDENTITY(n.owner) = :ownerId')
+            ->join('n.owner', 'o')
+            ->andWhere('o.id = :ownerId')
             ->setParameter('ownerId', $ownerId);
 
         if ($q) {
