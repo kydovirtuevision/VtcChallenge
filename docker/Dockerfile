@@ -29,4 +29,4 @@ WORKDIR /var/www/html
 EXPOSE 8080
 
 # Let supervisord start nginx & php-fpm
-CMD ["sh", "./docker/run.sh"]
+CMD ["bash", "./docker/run.sh"]
