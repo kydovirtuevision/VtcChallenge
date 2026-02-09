@@ -43,3 +43,31 @@ To run this project you will need:
     $ yarn watch
 
 After running this set of commands, without errors; you should be able to open `http://localhost:81/` and see `Hello World!!!` in the middle of the page.
+
+## Quick usage (API)
+
+Register a user (creates a file in `var/emails` with confirmation token):
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"email":"me@example.com","password":"pass"}' http://localhost:81/api/auth/register
+```
+
+Confirm account using token from `var/emails/<token>.txt`:
+
+```bash
+curl http://localhost:81/api/auth/confirm/TOKEN
+```
+
+Login to receive an API token:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"email":"me@example.com","password":"pass"}' http://localhost:81/api/auth/login
+```
+
+Use the returned `api_token` to call notes endpoints (Bearer token):
+
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:81/api/notes/
+```
+
+Frontend: open the app and use the Register / Login pages. After login the `Notes` page uses the API token stored in `localStorage`.
